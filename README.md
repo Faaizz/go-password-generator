@@ -58,3 +58,9 @@ To generate passwords with the CLI tool:
 ./go-password-generator help
 ```
 
+### Running Tests
+To run tests:
+```shell
+go test ./...
+```
+
