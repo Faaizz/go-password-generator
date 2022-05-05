@@ -1,0 +1,4 @@
+ghcr:
+  imageName: generate_password:latest
+  username: #secret
+  PAT: #secret

@@ -64,3 +64,10 @@ To run tests:
 go test ./...
 ```
 
+### Deployment to Kubernetes
+A deployment setup for Kubernetes has been assembled in ansible playbook [deploy.yaml](./.ansible/deploy.yaml).
+This playbook:
+- builds a docker image for the application
+- publishes the docker image to GitHub Container Registry
+- generates Kubernetes Deployment, Service, and Ingress configs
+- applies generated configs

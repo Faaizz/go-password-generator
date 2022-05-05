@@ -1,0 +1,38 @@
+# Deployment
+apiVersion: /apps/v1
+kind: Deployment
+metadata:
+    name: pwd-gen-deploy
+    labels:
+        app: pwd-gen
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: pwd-gen
+    template:
+        metadata:
+            labels:
+                app: pwd-gen
+        containers:
+        -   name: pwd-gen
+            image: ghcr.io/{{ ghcr.username }}/{{ ghcr.imageName }}
+            ports:
+            -   containerPort: 8080
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: pwd-gen-svc
+  labels:
+    app: pwd-gen
+spec:
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8080
+  selector:
+    app: pwd-gen
+  type: NodePort

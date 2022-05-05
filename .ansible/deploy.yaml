@@ -1,0 +1,41 @@
+- name: build and publish image
+  hosts: localhost
+  connection: local
+  vars:
+    k8sFiles:
+      - cm.yaml
+      - deploy-svc.yaml
+      - ingress.yaml
+  vars_files:
+    - vault.yaml
+
+  tasks:
+    - name: login to ghcr
+      ansible.builtin.shell:
+        cmd: echo {{ ghcr.PAT }} | docker login ghcr.io -u {{ ghcr.username }} --password-stdin
+      register: dockerLogin
+    
+    - debug: msg="{{ dockerLogin.stdout }}"
+    
+    - name: build docker image
+      ansible.builtin.shell:
+        chdir: ..
+        cmd: docker build -f .docker/Dockerfile -t ghcr.io/{{ ghcr.username }}/{{ imageName }} .
+      register: dockerBuild
+    
+    - debug: msg="{{ dockerBuild.stdout }}"
+
+    - name: publish to ghcr
+      ansible.builtin.shell:
+        cmd: docker push ghcr.io/{{ ghcr.username }}/{{ imageName }}
+
+    - name: generate K8s config
+      ansible.builtin.template:
+        src: ../.k8s/templates/{{ item }}
+        dest: ../.k8s/{{ item }}
+      with_items: "{{ k8sFiles }}"
+
+    - name: apply K8s config (assumes that the default Service Account has access to the GHCR repository to which image was pushed)
+       ansible.builtin.shell:
+        chdir: ..
+        cmd: kubectl apply -f 
