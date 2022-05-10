@@ -26,7 +26,7 @@ func GeneratePwd(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 func Start() error {
 	router := httprouter.New()
-	router.POST("/", GeneratePwd)
+	router.POST("/api/v1/password", GeneratePwd)
 
 	return http.ListenAndServe(":8080", router)
 }

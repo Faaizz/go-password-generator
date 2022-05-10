@@ -27,7 +27,7 @@ To generate passwords via the REST API, you need to first startup the server:
 ./go-password-generator
 ```
 
-Then make a `POST` request to [http://localhost:8080/](http://localhost:8080/) with a JSON body like:
+Then make a `POST` request to [http://localhost:8080/api/v1/password](http://localhost:8080/api/v1/password) with a JSON body like:
 ```json
 {
     "min_length": 8,
@@ -39,7 +39,7 @@ Then make a `POST` request to [http://localhost:8080/](http://localhost:8080/) w
 A sample curl request is:
 ```shell
 curl --request POST \
-  --url http://localhost:8080/ \
+  --url http://localhost:8080/api/v1/password \
   --header 'Content-Type: application/json' \
   --data '{
 	"min_length": 8,
